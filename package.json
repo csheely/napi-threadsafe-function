@@ -1,0 +1,22 @@
+{
+  "name": "napi-threadsafe-function",
+  "version": "1.0.0",
+  "description": "Example code that illustrates problem I'm having with Napi::ThreadSafeFunction",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/csheely/napi-threadsafe-function.git"
+  },
+  "author": "Chris Sheely",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/csheely/napi-threadsafe-function/issues"
+  },
+  "homepage": "https://github.com/csheely/napi-threadsafe-function#readme",
+  "dependencies": {
+    "cmake-js": "^6.0.0"
+  }
+}
