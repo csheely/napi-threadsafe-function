@@ -3,12 +3,8 @@
 'use strict';
 
 /* global */
-// try {
-  const { Foo } = require('../build/Release/tsf_test');
-// }
-// catch (error) {
-//   const { Foo } = require('../build/Debug/tsf_test');
-// }
+const { Foo } = require('../build/Release/tsf_test');
+// const { Foo } = require('../build/Debug/tsf_test');
 
 console.log('start');
 let myFoo = new Foo('Foo01');

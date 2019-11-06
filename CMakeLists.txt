@@ -3,6 +3,8 @@ project (tsf_test)
 
 add_library(${PROJECT_NAME} SHARED ${CMAKE_JS_SRC})
 
+add_definitions(-DNAPI_VERSION=4)
+
 target_sources(${PROJECT_NAME}
     PRIVATE
         src/foo.cpp
