@@ -1,6 +1,5 @@
 #include "foo_interface.h"
 #include "bar_interface.h"
-#include "scoped_lock_mutex.h"
 
 // Declaration of static objects in CFooInterface
 Napi::FunctionReference CFooInterface::constructor;
@@ -76,7 +75,6 @@ bool CFooInterface::CleanupHelper()
 {
     bool bResult = true;
 
-    CScopedLockMutex    lock(m_Mutex);
     std::map<std::string, CBarDataPtr>::iterator it;
     CBarDataPtr    pData;
 
@@ -179,8 +177,6 @@ bool CFooInterface::CreateBarInterface(const std::string& sName, Napi::Env& env,
     static uint32_t     nNewId = 0;
     bool                bAllocatedId;
 
-    CScopedLockMutex    lock(m_Mutex);
-
     try
     {
         if (m_NameBarMap.find(sName) != m_NameBarMap.end())
@@ -229,8 +225,6 @@ void CFooInterface::CleanupBarInterface(Napi::Object& BarIf)
 
         if (pBarData)
         {
-            CScopedLockMutex    lock(m_Mutex);
-
             std::map<uint32_t, CBarDataPtr>::iterator it = m_IdBarMap.find(pBarData->m_nId);
 
             if (it != m_IdBarMap.end())
@@ -264,4 +258,4 @@ void CFooInterface::SendCallback(CBarDataPtr pBarData, uint32_t* pCallbackData)
         delete pCallbackData;
     });
 }
-                                                                                          
+

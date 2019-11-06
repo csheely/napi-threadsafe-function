@@ -1,7 +1,6 @@
 #pragma once
 
 #include <napi.h>
-#include <mutex>
 #include <map>
 #include <cstdint>
 #include "bar_data.h"
@@ -29,7 +28,6 @@ private:
 
     void SendCallback(CBarDataPtr pEndpointData, uint32_t* pData);
 
-    std::mutex  m_Mutex;
     std::map<uint32_t, CBarDataPtr> m_IdBarMap;
     std::map<std::string, CBarDataPtr> m_NameBarMap;
 

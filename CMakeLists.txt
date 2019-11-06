@@ -12,7 +12,6 @@ target_sources(${PROJECT_NAME}
         src/bar_data.h
         src/bar_interface.cpp
         src/bar_interface.h
-	src/scoped_lock_mutex.h
 )
 
 target_include_directories(${PROJECT_NAME}
