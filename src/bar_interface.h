@@ -1,6 +1,6 @@
 #pragma once
 #include <napi.h>
-#include "bar_data.h"
+#include "bar_activity_receiver.h"
 
 class CBarInterface : public Napi::ObjectWrap<CBarInterface>
 {
@@ -9,8 +9,8 @@ public:
     static Napi::Object NewInstance(Napi::Env env);
     CBarInterface(const Napi::CallbackInfo& info);
 
-    void SetData(CBarDataPtr pData);
-    CBarDataPtr GetData();
+    void SetData(CBarActivityReceiverPtr pData);
+    CBarActivityReceiverPtr GetData();
     void ClearData();
     void ClearInvalidData();
 
@@ -23,5 +23,5 @@ private:
 
     static Napi::FunctionReference constructor;
 
-    CBarDataPtr    m_pBarData;
+    CBarActivityReceiverPtr    m_pBarActivityReceiver;
 };

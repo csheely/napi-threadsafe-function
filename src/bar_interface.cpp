@@ -32,37 +32,37 @@ Napi::Object CBarInterface::NewInstance(Napi::Env env)
     return scope.Escape(napi_value(obj)).ToObject();
 }
 
-void CBarInterface::SetData(CBarDataPtr pData)
+void CBarInterface::SetData(CBarActivityReceiverPtr pData)
 {
-    m_pBarData = pData;
+    m_pBarActivityReceiver = pData;
 }
 
-CBarDataPtr CBarInterface::GetData()
+CBarActivityReceiverPtr CBarInterface::GetData()
 {
-    return m_pBarData;
+    return m_pBarActivityReceiver;
 }
 
 /// <summary>Helper to clear out data associated with the object</summary>
 /// 
 void CBarInterface::ClearData()
 {
-    m_pBarData.reset();
+    m_pBarActivityReceiver.reset();
 }
 
 void CBarInterface::ClearInvalidData()
 {
-    if (m_pBarData && (!m_pBarData->IsValid()))
+    if (m_pBarActivityReceiver && (!m_pBarActivityReceiver->IsValid()))
     {
-        m_pBarData.reset();
+        m_pBarActivityReceiver.reset();
     }
 }
 
 bool CBarInterface::Register()
 {
     bool bResult = false;
-    if (m_pBarData)
+    if (m_pBarActivityReceiver)
     {
-        bResult = m_pBarData->Register();
+        bResult = m_pBarActivityReceiver->Register();
 
         if (!bResult)
         {
@@ -77,9 +77,9 @@ bool CBarInterface::Register()
 bool CBarInterface::Unregister()
 {
     bool bResult = false;
-    if (m_pBarData)
+    if (m_pBarActivityReceiver)
     {
-        bResult = m_pBarData->Unregister();
+        bResult = m_pBarActivityReceiver->Unregister();
 
         if (!bResult)
         {
@@ -98,7 +98,7 @@ Napi::Value CBarInterface::Bar1Request(const Napi::CallbackInfo& info)
     Napi::HandleScope   scope(env);
     Napi::Value         nullReturnVal;
 
-    if (!m_pBarData)
+    if (!m_pBarActivityReceiver)
     {
         Napi::Error::New(env, "CBarInterface::TransmitStateRequest() - Interface detached from endpoint data").ThrowAsJavaScriptException();
         return nullReturnVal;
@@ -119,7 +119,7 @@ Napi::Value CBarInterface::Bar2Request(const Napi::CallbackInfo& info)
     Napi::HandleScope   scope(env);
     Napi::Value         nullReturnVal;
 
-    if (!m_pBarData)
+    if (!m_pBarActivityReceiver)
     {
         Napi::Error::New(env, "CBarInterface::EndpointStateRequest() - Interface detached from endpoint data").ThrowAsJavaScriptException();
         return nullReturnVal;

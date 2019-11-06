@@ -8,8 +8,8 @@ target_sources(${PROJECT_NAME}
         src/foo.cpp
         src/foo.h
         src/main.cpp
-        src/bar_data.cpp
-        src/bar_data.h
+        src/bar_activity_receiver.cpp
+        src/bar_activity_receiver.h
         src/bar_interface.cpp
         src/bar_interface.h
 )

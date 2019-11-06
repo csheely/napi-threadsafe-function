@@ -3,7 +3,7 @@
 #include <napi.h>
 #include <map>
 #include <cstdint>
-#include "bar_data.h"
+#include "bar_activity_receiver.h"
 
 class CFoo: public Napi::ObjectWrap<CFoo>
 {
@@ -26,10 +26,8 @@ private:
     bool CreateBarInterface(const std::string& sName, Napi::Env& env, Napi::Function& callback, Napi::Object& pBarIf);
     void CleanupBarInterface(Napi::Object& pBarIf);
 
-    void SendCallback(CBarDataPtr pEndpointData, uint32_t* pData);
-
-    std::map<uint32_t, CBarDataPtr> m_IdBarMap;
-    std::map<std::string, CBarDataPtr> m_NameBarMap;
+    std::map<uint32_t, CBarActivityReceiverPtr> m_IdBarMap;
+    std::map<std::string, CBarActivityReceiverPtr> m_NameBarMap;
 
     std::string      m_sName;
 };

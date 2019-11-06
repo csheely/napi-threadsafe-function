@@ -75,8 +75,8 @@ bool CFoo::CleanupHelper()
 {
     bool bResult = true;
 
-    std::map<std::string, CBarDataPtr>::iterator it;
-    CBarDataPtr    pData;
+    std::map<std::string, CBarActivityReceiverPtr>::iterator it;
+    CBarActivityReceiverPtr    pData;
 
     while (!m_NameBarMap.empty())
     {
@@ -187,15 +187,15 @@ bool CFoo::CreateBarInterface(const std::string& sName, Napi::Env& env, Napi::Fu
         nNewId++;
         bAllocatedId = true;
 
-        CBarDataPtr pBarData =
-            std::make_shared<CBarData>(sName, nNewId, env, callback);
+        CBarActivityReceiverPtr pBarActivityReceiver =
+            std::make_shared<CBarActivityReceiver>(sName, nNewId, env, callback);
 
         BarIf = CBarInterface::NewInstance(env);
         CBarInterface* pIf = CBarInterface::Unwrap(BarIf);
-        pIf->SetData(pBarData);
+        pIf->SetData(pBarActivityReceiver);
 
-        m_IdBarMap[nNewId] = pBarData;
-        m_NameBarMap[sName] = pBarData;
+        m_IdBarMap[nNewId] = pBarActivityReceiver;
+        m_NameBarMap[sName] = pBarActivityReceiver;
     }
     catch (...)
     {
@@ -221,41 +221,20 @@ void CFoo::CleanupBarInterface(Napi::Object& BarIf)
     if (!BarIf.IsEmpty())
     {
         CBarInterface* pBarIf = CBarInterface::Unwrap(BarIf);
-        CBarDataPtr pBarData = pBarIf->GetData();
+        CBarActivityReceiverPtr pBarActivityReceiver = pBarIf->GetData();
 
-        if (pBarData)
+        if (pBarActivityReceiver)
         {
-            std::map<uint32_t, CBarDataPtr>::iterator it = m_IdBarMap.find(pBarData->m_nId);
+            std::map<uint32_t, CBarActivityReceiverPtr>::iterator it = m_IdBarMap.find(pBarActivityReceiver->m_nId);
 
             if (it != m_IdBarMap.end())
             {
                 m_IdBarMap.erase(it);
-                m_NameBarMap.erase(pBarData->m_sName);
+                m_NameBarMap.erase(pBarActivityReceiver->m_sName);
             }
 
             pBarIf->ClearData();
         }
     }
-}
-
-void CFoo::SendCallback(CBarDataPtr pBarData, uint32_t* pCallbackData)
-{
-    // the BlockingCall() method takes a lambda function that gets
-    // executed in the context of the main Node.js execution thread.
-    // Then it's this lambda function that generates the arguments
-    // and explicitly calls the "real" javascript callback function
-    pBarData->m_Callback.BlockingCall(pCallbackData, [](Napi::Env env, Napi::Function jsCallback, uint32_t* pCallbackData)
-    {
-        Napi::Object Arguments = Napi::Object::New(env);
-
-        Arguments.Set("data", Napi::Number::New(env, *pCallbackData));
-
-        jsCallback.Call( {
-            Napi::String::New(env, "dataEvent"),
-            Arguments
-        } );
-
-        delete pCallbackData;
-    });
 }
 
