@@ -1,31 +1,31 @@
-#include "foo_interface.h"
+#include "foo.h"
 #include "bar_interface.h"
 
-// Declaration of static objects in CFooInterface
-Napi::FunctionReference CFooInterface::constructor;
+// Declaration of static objects in CFoo
+Napi::FunctionReference CFoo::constructor;
 
 // Method to define how the class is exposed in Javascript.
-Napi::Object CFooInterface::Init(Napi::Env env, Napi::Object exports)
+Napi::Object CFoo::Init(Napi::Env env, Napi::Object exports)
 {
     Napi::HandleScope   scope(env);
 
-    Napi::Function  func = DefineClass(env, "FooInterface", {
-        InstanceMethod("cleanup", &CFooInterface::Cleanup),
-        InstanceMethod("registerBar", &CFooInterface::RegisterBar),
-        InstanceMethod("deregisterBar", &CFooInterface::DeregisterBar)
+    Napi::Function  func = DefineClass(env, "Foo", {
+        InstanceMethod("cleanup", &CFoo::Cleanup),
+        InstanceMethod("registerBar", &CFoo::RegisterBar),
+        InstanceMethod("deregisterBar", &CFoo::DeregisterBar)
     });
 
     constructor = Napi::Persistent(func);
     constructor.SuppressDestruct();
 
-    exports.Set("FooInterface", func);
+    exports.Set("Foo", func);
 
     return exports;
 }
 
 // Constructor.
-CFooInterface::CFooInterface(const Napi::CallbackInfo& info)
-: Napi::ObjectWrap<CFooInterface>(info)
+CFoo::CFoo(const Napi::CallbackInfo& info)
+: Napi::ObjectWrap<CFoo>(info)
 {
     Napi::Env           env = info.Env();
     Napi::HandleScope   scope(env);
@@ -33,13 +33,13 @@ CFooInterface::CFooInterface(const Napi::CallbackInfo& info)
     // Make sure JS arguments are what we expect.
     if (info.Length() != 1)
     {
-        Napi::TypeError::New(env, "Invalid number of arguments to FooInterface constructor").ThrowAsJavaScriptException();
+        Napi::TypeError::New(env, "Invalid number of arguments to Foo constructor").ThrowAsJavaScriptException();
         return;
     }
 
     if (!info[0].IsString())
     {
-        Napi::TypeError::New(env, "Invalid argument types to FooInterface constructor").ThrowAsJavaScriptException();
+        Napi::TypeError::New(env, "Invalid argument types to Foo constructor").ThrowAsJavaScriptException();
         return;
     }
 
@@ -47,7 +47,7 @@ CFooInterface::CFooInterface(const Napi::CallbackInfo& info)
 }
 
 // Destructor.  Cleanup any underlying references.
-CFooInterface::~CFooInterface()
+CFoo::~CFoo()
 {
     CleanupHelper();
 }
@@ -55,7 +55,7 @@ CFooInterface::~CFooInterface()
 // Do whatever it takes to shut down the lower-level activity associated with this
 // object.  Currently no way to reuse the object, but this method must be called
 // for low-level cleanup.
-Napi::Value CFooInterface::Cleanup(const Napi::CallbackInfo& info)
+Napi::Value CFoo::Cleanup(const Napi::CallbackInfo& info)
 {
     Napi::Env   env = info.Env();
     Napi::HandleScope   scope(env);
@@ -71,7 +71,7 @@ Napi::Value CFooInterface::Cleanup(const Napi::CallbackInfo& info)
 }
 
 // Performs the real work to cleanup the class and stop activity.
-bool CFooInterface::CleanupHelper()
+bool CFoo::CleanupHelper()
 {
     bool bResult = true;
 
@@ -96,7 +96,7 @@ bool CFooInterface::CleanupHelper()
     return bResult;
 }
 
-Napi::Value CFooInterface::RegisterBar(const Napi::CallbackInfo& info)
+Napi::Value CFoo::RegisterBar(const Napi::CallbackInfo& info)
 {
     Napi::Env           env = info.Env();
     Napi::HandleScope   scope(env);
@@ -105,13 +105,13 @@ Napi::Value CFooInterface::RegisterBar(const Napi::CallbackInfo& info)
 
     if (info.Length() != 2)
     {
-        Napi::TypeError::New(env, "CFooInterface::RegisterBar() - Invalid number of arguments").ThrowAsJavaScriptException();
+        Napi::TypeError::New(env, "CFoo::RegisterBar() - Invalid number of arguments").ThrowAsJavaScriptException();
         return nullReturnVal;
     }
 
     if ((!info[0].IsString()) || (!info[1].IsFunction()))
     {
-        Napi::TypeError::New(env, "CFooInterface::RegisterBar() - Invalid argument types").ThrowAsJavaScriptException();
+        Napi::TypeError::New(env, "CFoo::RegisterBar() - Invalid argument types").ThrowAsJavaScriptException();
         return nullReturnVal;
     }
 
@@ -120,7 +120,7 @@ Napi::Value CFooInterface::RegisterBar(const Napi::CallbackInfo& info)
 
     if (CreateBarInterface(sBarName, env, callback, BarIfObj) == false)
     {
-        Napi::Error::New(env, "CFooInterface::RegisterBar() - Bar creation error").ThrowAsJavaScriptException();
+        Napi::Error::New(env, "CFoo::RegisterBar() - Bar creation error").ThrowAsJavaScriptException();
         return nullReturnVal;
     }
 
@@ -129,14 +129,14 @@ Napi::Value CFooInterface::RegisterBar(const Napi::CallbackInfo& info)
     if (pBar->Register() == false)
     {
         CleanupBarInterface(BarIfObj);
-        Napi::Error::New(env, "CFooInterface::RegisterBar() - Bar registration error").ThrowAsJavaScriptException();
+        Napi::Error::New(env, "CFoo::RegisterBar() - Bar registration error").ThrowAsJavaScriptException();
         return nullReturnVal;
     }
 
     return BarIfObj;
 }
 
-Napi::Value CFooInterface::DeregisterBar(const Napi::CallbackInfo& info)
+Napi::Value CFoo::DeregisterBar(const Napi::CallbackInfo& info)
 {
     Napi::Env           env = info.Env();
     Napi::HandleScope   scope(env);
@@ -144,13 +144,13 @@ Napi::Value CFooInterface::DeregisterBar(const Napi::CallbackInfo& info)
 
     if (info.Length() != 1)
     {
-        Napi::TypeError::New(env, "CFooInterface::DeregisterBar() - Invalid number of arguments").ThrowAsJavaScriptException();
+        Napi::TypeError::New(env, "CFoo::DeregisterBar() - Invalid number of arguments").ThrowAsJavaScriptException();
         return nullReturnVal;
     }
 
     if (!info[0].IsObject())
     {
-        Napi::TypeError::New(env, "CFooInterface::DeregisterBar() - Invalid argument type").ThrowAsJavaScriptException();
+        Napi::TypeError::New(env, "CFoo::DeregisterBar() - Invalid argument type").ThrowAsJavaScriptException();
         return nullReturnVal;
     }
 
@@ -163,7 +163,7 @@ Napi::Value CFooInterface::DeregisterBar(const Napi::CallbackInfo& info)
 
     if (bUnregResult == false)
     {
-        Napi::Error::New(env, "CFooInterface::DeregisterBar() - orange unregister problem").ThrowAsJavaScriptException();
+        Napi::Error::New(env, "CFoo::DeregisterBar() - orange unregister problem").ThrowAsJavaScriptException();
         return nullReturnVal;
     }
 
@@ -171,7 +171,7 @@ Napi::Value CFooInterface::DeregisterBar(const Napi::CallbackInfo& info)
 }
 
 
-bool CFooInterface::CreateBarInterface(const std::string& sName, Napi::Env& env, Napi::Function& callback, Napi::Object& BarIf)
+bool CFoo::CreateBarInterface(const std::string& sName, Napi::Env& env, Napi::Function& callback, Napi::Object& BarIf)
 {
     bool                bSuccess = true;
     static uint32_t     nNewId = 0;
@@ -216,7 +216,7 @@ bool CFooInterface::CreateBarInterface(const std::string& sName, Napi::Env& env,
     return bSuccess;
 }
 
-void CFooInterface::CleanupBarInterface(Napi::Object& BarIf)
+void CFoo::CleanupBarInterface(Napi::Object& BarIf)
 {
     if (!BarIf.IsEmpty())
     {
@@ -238,7 +238,7 @@ void CFooInterface::CleanupBarInterface(Napi::Object& BarIf)
     }
 }
 
-void CFooInterface::SendCallback(CBarDataPtr pBarData, uint32_t* pCallbackData)
+void CFoo::SendCallback(CBarDataPtr pBarData, uint32_t* pCallbackData)
 {
     // the BlockingCall() method takes a lambda function that gets
     // executed in the context of the main Node.js execution thread.

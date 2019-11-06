@@ -5,11 +5,11 @@
 #include <cstdint>
 #include "bar_data.h"
 
-class CFooInterface: public Napi::ObjectWrap<CFooInterface>
+class CFoo: public Napi::ObjectWrap<CFoo>
 {
 public:
-    CFooInterface(const Napi::CallbackInfo& info);
-    ~CFooInterface();
+    CFoo(const Napi::CallbackInfo& info);
+    ~CFoo();
 
     static Napi::Object Init(Napi::Env env, Napi::Object exports);
 

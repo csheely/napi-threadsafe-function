@@ -4,14 +4,14 @@
 
 /* global */
 // try {
-  const { FooInterface } = require('../build/Release/tsf_test');
+  const { Foo } = require('../build/Release/tsf_test');
 // }
 // catch (error) {
-//   const { FooInterface } = require('../build/Debug/tsf_test');
+//   const { Foo } = require('../build/Debug/tsf_test');
 // }
 
 console.log('start');
-let myFoo = new FooInterface('Foo01');
+let myFoo = new Foo('Foo01');
 console.log('myFoo initialized');
 let BarArray = [];
 console.log('bar array initialized');

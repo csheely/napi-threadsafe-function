@@ -5,8 +5,8 @@ add_library(${PROJECT_NAME} SHARED ${CMAKE_JS_SRC})
 
 target_sources(${PROJECT_NAME}
     PRIVATE
-        src/foo_interface.cpp
-        src/foo_interface.h
+        src/foo.cpp
+        src/foo.h
         src/main.cpp
         src/bar_data.cpp
         src/bar_data.h
