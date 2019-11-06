@@ -6,13 +6,12 @@
 const { Foo } = require('../build/Release/tsf_test');
 // const { Foo } = require('../build/Debug/tsf_test');
 
-console.log('start');
+console.log('Create Foo Instance');
 let myFoo = new Foo('Foo01');
-console.log('myFoo initialized');
+console.log('Foo Instance Created');
 let BarArray = [];
-console.log('bar array initialized');
 
-class myBar {
+class BarOfInterest {
     constructor(unique_id) {
         this.name = `bar-${unique_id}`;
         this.barInterace = null;
@@ -38,7 +37,7 @@ class myBar {
 
 function registerBars() {
     for (let i = 0; i < 10; i++) {
-        let bar = new myBar(i);
+        let bar = new BarOfInterest(i);
 
         bar.register();
         BarArray.push(bar);
