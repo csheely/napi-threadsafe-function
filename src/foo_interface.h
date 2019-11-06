@@ -1,7 +1,10 @@
 #pragma once
 
 #include <napi.h>
-#include "bar_handler.h"
+#include <mutex>
+#include <map>
+#include <cstdint>
+#include "bar_data.h"
 
 class CFooInterface: public Napi::ObjectWrap<CFooInterface>
 {
@@ -10,6 +13,7 @@ public:
     ~CFooInterface();
 
     static Napi::Object Init(Napi::Env env, Napi::Object exports);
+
 
 private:
     static Napi::FunctionReference constructor;
@@ -20,6 +24,14 @@ private:
 
     bool CleanupHelper();
 
-    CBarHandler      m_BarHandler;
+    bool CreateBarInterface(const std::string& sName, Napi::Env& env, Napi::Function& callback, Napi::Object& pBarIf);
+    void CleanupBarInterface(Napi::Object& pBarIf);
+
+    void SendCallback(CBarDataPtr pEndpointData, uint32_t* pData);
+
+    std::mutex  m_Mutex;
+    std::map<uint32_t, CBarDataPtr> m_IdBarMap;
+    std::map<std::string, CBarDataPtr> m_NameBarMap;
+
     std::string      m_sName;
 };

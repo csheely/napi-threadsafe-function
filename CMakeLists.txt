@@ -10,8 +10,6 @@ target_sources(${PROJECT_NAME}
         src/main.cpp
         src/bar_data.cpp
         src/bar_data.h
-        src/bar_handler.cpp
-        src/bar_handler.h
         src/bar_interface.cpp
         src/bar_interface.h
 	src/scoped_lock_mutex.h
