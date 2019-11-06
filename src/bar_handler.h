@@ -18,7 +18,7 @@ public:
     void CleanupBarInterface(Napi::Object& pBarIf);
 
 protected:
-    void SendCallback(CBarDataPtr pEndpointData, CBarCallbackData* pData);
+    void SendCallback(CBarDataPtr pEndpointData, uint32_t* pData);
 
     std::mutex  m_Mutex;
     std::map<uint32_t, CBarDataPtr> m_IdBarMap;

@@ -1,6 +1,5 @@
 #include "bar_handler.h"
 #include "scoped_lock_mutex.h"
-#include "bar_callback_data.h"
 #include "bar_interface.h"
 
 CBarHandler::CBarHandler()
@@ -107,25 +106,23 @@ void CBarHandler::CleanupBarInterface(Napi::Object& BarIf)
     }
 }
 
-void CBarHandler::SendCallback(CBarDataPtr pBarData, CBarCallbackData* pCallbackData)
+void CBarHandler::SendCallback(CBarDataPtr pBarData, uint32_t* pCallbackData)
 {
-#if 0
     // the BlockingCall() method takes a lambda function that gets
     // executed in the context of the main Node.js execution thread.
     // Then it's this lambda function that generates the arguments
     // and explicitly calls the "real" javascript callback function
-    pBarData->m_Callback.BlockingCall(pCallbackData, [](Napi::Env env, Napi::Function jsCallback, CBarCallbackData* pCallbackData)
+    pBarData->m_Callback.BlockingCall(pCallbackData, [](Napi::Env env, Napi::Function jsCallback, uint32_t* pCallbackData)
     {
         Napi::Object Arguments = Napi::Object::New(env);
 
-        pCallbackData->JavascriptInator(env, Arguments);
+	Arguments.Set("data", Napi::Number::New(env, *pCallbackData));
 
         jsCallback.Call( { 
-            Napi::String::New(env, pCallbackData->EventName()),
+            Napi::String::New(env, "dataEvent"),
             Arguments
         } );
 
         delete pCallbackData;
     });
-#endif
 }

@@ -8,7 +8,6 @@ target_sources(${PROJECT_NAME}
         src/foo_interface.cpp
         src/foo_interface.h
         src/main.cpp
-        src/bar_callback_data.h
         src/bar_data.cpp
         src/bar_data.h
         src/bar_handler.cpp
