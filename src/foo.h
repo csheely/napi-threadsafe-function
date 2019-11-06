@@ -26,7 +26,6 @@ private:
     bool CreateBarInterface(const std::string& sName, Napi::Env& env, Napi::Function& callback, Napi::Object& pBarIf);
     void CleanupBarInterface(Napi::Object& pBarIf);
 
-    std::map<uint32_t, CBarActivityReceiverPtr> m_IdBarMap;
     std::map<std::string, CBarActivityReceiverPtr> m_NameBarMap;
 
     std::string      m_sName;

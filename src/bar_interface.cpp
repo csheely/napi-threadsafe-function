@@ -49,44 +49,16 @@ void CBarInterface::ClearData()
     m_pBarActivityReceiver.reset();
 }
 
-void CBarInterface::ClearInvalidData()
-{
-    if (m_pBarActivityReceiver && (!m_pBarActivityReceiver->IsValid()))
-    {
-        m_pBarActivityReceiver.reset();
-    }
-}
-
 bool CBarInterface::Register()
 {
-    bool bResult = false;
-    if (m_pBarActivityReceiver)
-    {
-        bResult = m_pBarActivityReceiver->Register();
-
-        if (!bResult)
-        {
-            // check to see if we should clear our reference to the endpointdata
-            ClearInvalidData();
-        }
-    }
+    bool bResult = true;
 
     return bResult;
 }
 
 bool CBarInterface::Unregister()
 {
-    bool bResult = false;
-    if (m_pBarActivityReceiver)
-    {
-        bResult = m_pBarActivityReceiver->Unregister();
-
-        if (!bResult)
-        {
-            // check to see if we should clear our reference to the endpointdata
-            ClearInvalidData();
-        }
-    }
+    bool bResult = true;
 
     return bResult;
 }

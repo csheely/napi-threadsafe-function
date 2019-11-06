@@ -83,13 +83,7 @@ bool CFoo::CleanupHelper()
         it = m_NameBarMap.begin();
         pData = it->second;
 
-        // In case there's a Javascript-instantiated object (CBarInterface)
-        // that still has a reference to the endpoint data object , set a delete
-        // flag in the object.  This lets the holdouts know that the data is no
-        // longer valid, and the reference should be cleared.
-        pData->SetDeleteFlag();
         m_NameBarMap.erase(it);
-        m_IdBarMap.erase(pData->m_nId);
         pData.reset();
     }
 
@@ -174,8 +168,6 @@ Napi::Value CFoo::DeregisterBar(const Napi::CallbackInfo& info)
 bool CFoo::CreateBarInterface(const std::string& sName, Napi::Env& env, Napi::Function& callback, Napi::Object& BarIf)
 {
     bool                bSuccess = true;
-    static uint32_t     nNewId = 0;
-    bool                bAllocatedId;
 
     try
     {
@@ -184,32 +176,24 @@ bool CFoo::CreateBarInterface(const std::string& sName, Napi::Env& env, Napi::Fu
             throw std::domain_error("Bar already registered");
         }
 
-        nNewId++;
-        bAllocatedId = true;
-
         CBarActivityReceiverPtr pBarActivityReceiver =
-            std::make_shared<CBarActivityReceiver>(sName, nNewId, env, callback);
+            std::make_shared<CBarActivityReceiver>(sName, env, callback);
 
         BarIf = CBarInterface::NewInstance(env);
         CBarInterface* pIf = CBarInterface::Unwrap(BarIf);
         pIf->SetData(pBarActivityReceiver);
 
-        m_IdBarMap[nNewId] = pBarActivityReceiver;
         m_NameBarMap[sName] = pBarActivityReceiver;
     }
     catch (...)
     {
         bSuccess = false;
-        if (bAllocatedId)
-        {
-            m_IdBarMap.erase(nNewId);
-            m_NameBarMap.erase(sName);
+        m_NameBarMap.erase(sName);
 
-            if (!BarIf.IsEmpty())
-            {
-                CBarInterface* pIf = CBarInterface::Unwrap(BarIf);
-                pIf->ClearData();
-            }
+        if (!BarIf.IsEmpty())
+        {
+            CBarInterface* pIf = CBarInterface::Unwrap(BarIf);
+            pIf->ClearData();
         }
     }
 
@@ -225,12 +209,11 @@ void CFoo::CleanupBarInterface(Napi::Object& BarIf)
 
         if (pBarActivityReceiver)
         {
-            std::map<uint32_t, CBarActivityReceiverPtr>::iterator it = m_IdBarMap.find(pBarActivityReceiver->m_nId);
+            std::map<std::string, CBarActivityReceiverPtr>::iterator it = m_NameBarMap.find(pBarActivityReceiver->GetName());
 
-            if (it != m_IdBarMap.end())
+            if (it != m_NameBarMap.end())
             {
-                m_IdBarMap.erase(it);
-                m_NameBarMap.erase(pBarActivityReceiver->m_sName);
+                m_NameBarMap.erase(it);
             }
 
             pBarIf->ClearData();

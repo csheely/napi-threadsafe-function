@@ -1,9 +1,7 @@
 #include "bar_activity_receiver.h"
 
-CBarActivityReceiver::CBarActivityReceiver(const std::string& sName, const uint32_t& nId, Napi::Env& env, Napi::Function& callback)
+CBarActivityReceiver::CBarActivityReceiver(const std::string& sName, Napi::Env& env, Napi::Function& callback)
 : m_sName(sName)
-, m_nId(nId)
-, m_bPendingDeletion(false)
 {
     m_Callback = Napi::ThreadSafeFunction::New(env, callback, sName.c_str(), 0, 1);
 }
@@ -11,24 +9,6 @@ CBarActivityReceiver::CBarActivityReceiver(const std::string& sName, const uint3
 CBarActivityReceiver::~CBarActivityReceiver()
 {
     m_Callback.Release();
-}
-
-bool CBarActivityReceiver::Register()
-{
-    bool bResult = IsValid();
-
-    return bResult;
-}
-
-bool CBarActivityReceiver::Unregister()
-{
-    bool bResult = IsValid();
-
-    return bResult;
-}
-
-void CBarActivityReceiver::ClearData()
-{
 }
 
 void CBarActivityReceiver::SendCallback(uint32_t* pCallbackData)

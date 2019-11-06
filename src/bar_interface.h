@@ -12,7 +12,6 @@ public:
     void SetData(CBarActivityReceiverPtr pData);
     CBarActivityReceiverPtr GetData();
     void ClearData();
-    void ClearInvalidData();
 
     bool Register();
     bool Unregister();
