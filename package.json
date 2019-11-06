@@ -4,7 +4,11 @@
   "description": "Example code that illustrates problem I'm having with Napi::ThreadSafeFunction",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "cmake-js build",
+    "rebuild": "cmake-js rebuild",
+    "build-debug": "cmake-js build -D",
+    "rebuild-debug": "cmake-js rebuild -D"
   },
   "repository": {
     "type": "git",
@@ -17,6 +21,7 @@
   },
   "homepage": "https://github.com/csheely/napi-threadsafe-function#readme",
   "dependencies": {
-    "cmake-js": "^6.0.0"
+    "cmake-js": "^6.0.0",
+    "node-addon-api": "^1.7.1"
   }
 }
