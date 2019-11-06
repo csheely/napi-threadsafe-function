@@ -23,3 +23,10 @@ There is external activity that will generate events on the `Bar` objects, so th
 De-registering `BarInterface` objects appears to work fine on Windows platforms (or at least works for a very, very long time without problems).  On Linux (testing on Ubuntu 18.04 and derivatives), the code is much less stable, and appears to be related to destroying the `Napi::ThreadSafeFunction` instance.
 
 Deregistering one or two `BarInterface` objects will work for a short time on Linux and then cause a core dump.  Deregistering a larger amount (10 obects one after the other) appears to always crash.
+
+
+## To Build and Test
+- `npm install`
+- `npm run rebuild`
+- `node test/test.js`
+
