@@ -1,6 +1,8 @@
 # napi-threadsafe-function
 Example code that demonstrates problem I'm having with Napi::ThreadSafeFunction
 
+**06-Nov-2019 NOTE: This problem was seen with the 1.7.1 version of the `node-addon-api` package.  However it seems to be fixed with the latest (master branch) files from the node-addon-api repo, and the fix should appear in the upcoming 2.0.0 release.**
+
 ## The Purpose of the Code
 This module is meant to allow Node.js applications to do the following:
 
