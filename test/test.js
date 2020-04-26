@@ -10,6 +10,7 @@ console.log('Create Foo Instance');
 let myFoo = new Foo('Foo01');
 console.log('Foo Instance Created');
 let BarArray = [];
+let testRun = 0;
 
 class BarOfInterest {
     constructor(unique_id) {
@@ -36,6 +37,8 @@ class BarOfInterest {
 }
 
 function registerBars() {
+    testRun++;
+    console.log(`Test Run #${testRun}`);
     for (let i = 0; i < 10; i++) {
         let bar = new BarOfInterest(i);
 
